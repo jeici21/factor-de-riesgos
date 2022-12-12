@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes</title>
+    <style>
+        table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td,
+        th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04AA6D;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        function CalculoRiesgo() {
+            var porcentajeAzucar = document.getElementById("porcentajeAzucar").value;
+            var porcentajeGrasa = document.getElementById("porcentajeGrasa").value;
+            var porcentajeOxigeno = document.getElementById("porcentajeOxigeno").value;
+            if (porcentajeAzucar > 70 && porcentajeGrasa > 88.5 && porcentajeOxigeno < 60) {
+                var riesgo = "ALTO";
+            } else if ((porcentajeAzucar >= 50 && porcentajeAzucar <= 70) && (porcentajeGrasa >= 62.2 && porcentajeGrasa <= 88.5) && (porcentajeOxigeno >= 60 && porcentajeOxigeno <= 70)) {
+                var riesgo = "MEDIO";
+            } else if (porcentajeAzucar < 50 && porcentajeGrasa < 62.2 && porcentajeOxigeno > 70) {
+                var riesgo = "BAJO";
+            } else {
+                var riesgo = "NO DEFINIDO";
+            }
+            document.getElementById("riesgo").innerHTML = riesgo;
+        }
+    </script>
+    <div class="col-12">
+        <h2>Pacientes</h2>
+        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+            th:text="${mensaje}" class="alert">
+        </div>
+        <a th:href="@{/}">Agregar</a>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Porcentaje de azúcar</th>
+                        <th>Porcentaje de grasa</th>
+                        <th>Porcentaje de oxígeno</th>
+                        <th>Factor de riesgo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="paciente : ${pacientes}">
+                        <td th:text="${paciente.nombre}"></td>
+                        <td th:text="${paciente.apellido}"></td>
+                        <td th:text="${paciente.porcentajeAzucar}" id="porcentajeAzucar"></td>
+                        <td th:text="${paciente.porcentajeGrasa}" id="porcentajeGrasa"></td>
+                        <td th:text="${paciente.porcentajeOxigeno}" id="porcentajeOxigeno"></td>
+                        <td>
+                            <p id="riesgo" onclick="CalculoRiesgo()">Dar clic aquí para calcular</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

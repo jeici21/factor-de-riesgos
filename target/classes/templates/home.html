@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto final</title>
+    <style>
+        input {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        div {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body style="font-family: Arial, Helvetica, sans-serif;">
+    <script>
+        function CalculoRiesgo() {
+            var porcentajeAzucar = document.getElementById("porcentajeAzucar").value;
+            var porcentajeGrasa = document.getElementById("porcentajeGrasa").value;
+            var porcentajeOxigeno = document.getElementById("porcentajeOxigeno").value;
+            if (porcentajeAzucar > 70 && porcentajeGrasa > 88.5 && porcentajeOxigeno < 60) {
+                var riesgo = "ALTO";
+            } else if ((porcentajeAzucar >= 50 && porcentajeAzucar <= 70) && (porcentajeGrasa >= 62.2 && porcentajeGrasa <= 88.5) && (porcentajeOxigeno >= 60 && porcentajeOxigeno <= 70)) {
+                var riesgo = "MEDIO";
+            } else if (porcentajeAzucar < 50 && porcentajeGrasa < 62.2 && porcentajeOxigeno > 70) {
+                var riesgo = "BAJO";
+            } else {
+                var riesgo = "NO DEFINIDO";
+            }
+            document.getElementById("riesgo").innerHTML = riesgo;
+        }
+        function RegistroExitoso() {
+            alert("Paciente registrado exitosamente");
+        }
+    </script>
+    <h1><span th:text="${appName}"></span></h1>
+    <h4>Para conocer el factor de riesgo de una persona, rellene los siguientes campos:</h4>
+    <div>
+        <form th:object="${paciente}" th:action="${home}" method="post">
+            <label for="nombre">Nombre:</label>
+            <input th:field="*{nombre}" type="text" id="nombre"><br>
+            <label for="apellido">Apellido: </label>
+            <input th:field="*{apellido}" type="text" id="apellido"><br>
+            <label for="porcentajeAzucar">Porcentaje de azúcar: </label>
+            <input th:field="*{porcentajeAzucar}" type="number" id="porcentajeAzucar" min="0" max="100"
+                placeholder="En porcentajes del 0 al 100."><br>
+            <label for="porcentajeGrasa">Porcentaje de grasa: </label>
+            <input th:field="*{porcentajeGrasa}" type="number" id="porcentajeGrasa" min="0" max="100"
+                placeholder="En porcentajes del 0 al 100."><br>
+            <label for="porcantajeOxigeno">Porcentaje de oxígeno: </label>
+            <input th:field="*{porcentajeOxigeno}" type="number" id="porcentajeOxigeno" min="0" max="100"
+                placeholder="En porcentajes del 0 al 100."><br>
+            <label>Factor de riesgo: </label>
+            <p id="riesgo"></p>
+            <button type="button" onclick="CalculoRiesgo();">Calcular</button>
+            <button class="btn btn-success" type="submit" onclick="RegistroExitoso();">Registrar</button>
+            <a th:href="@{lista}">Ver todos</a>
+        </form>
+    </div>
+</body>
+
+</html>
